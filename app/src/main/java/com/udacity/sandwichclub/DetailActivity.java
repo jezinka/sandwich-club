@@ -12,15 +12,28 @@ import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    @BindView(R.id.origin_tv)
+    TextView originTextView;
+    @BindView(R.id.also_known_tv)
+    TextView alsoKnownTextView;
+    @BindView(R.id.ingredients_tv)
+    TextView ingredientsTextView;
+    @BindView(R.id.description_tv)
+    TextView descriptionTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
 
@@ -58,18 +71,15 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * populate UI with sandwich details
+     *
+     * @param sandwich
+     */
     private void populateUI(Sandwich sandwich) {
-
-        TextView originTextView = findViewById(R.id.origin_tv);
         originTextView.setText(sandwich.getPlaceOfOrigin());
-
-        TextView alsoKnownTextView = findViewById(R.id.also_known_tv);
         alsoKnownTextView.setText(TextUtils.join("\n", sandwich.getAlsoKnownAs()));
-
-        TextView ingredientsTextView = findViewById(R.id.ingredients_tv);
         ingredientsTextView.setText(TextUtils.join("\n", sandwich.getIngredients()));
-
-        TextView descriptionTextView = findViewById(R.id.description_tv);
         descriptionTextView.setText(sandwich.getDescription());
     }
 }

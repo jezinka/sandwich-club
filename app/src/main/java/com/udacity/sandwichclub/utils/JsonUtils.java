@@ -28,12 +28,12 @@ public class JsonUtils {
             JSONObject jsonSandwich = new JSONObject(json);
             JSONObject name = jsonSandwich.getJSONObject(NAME);
 
-            String mainName = name.getString(MAIN_NAME);
+            String mainName = name.optString(MAIN_NAME);
             List<String> otherNames = prepareList(name.getJSONArray(ALSO_KNOWN_AS));
 
-            String placeOfOrigin = jsonSandwich.getString(PLACE_OF_ORIGIN);
-            String description = jsonSandwich.getString(DESCRIPTION);
-            String image = jsonSandwich.getString(IMAGE);
+            String placeOfOrigin = jsonSandwich.optString(PLACE_OF_ORIGIN);
+            String description = jsonSandwich.optString(DESCRIPTION);
+            String image = jsonSandwich.optString(IMAGE);
             List<String> ingredients = prepareList(jsonSandwich.getJSONArray(INGREDIENTS));
 
             return new Sandwich(mainName, otherNames, placeOfOrigin, description, image, ingredients);
@@ -44,11 +44,18 @@ public class JsonUtils {
         return null;
     }
 
+    /**
+     * retrieve String properties from JSONArray
+     *
+     * @param jsonArray
+     * @return List
+     * @throws JSONException
+     */
     @NonNull
     private static List<String> prepareList(JSONArray jsonArray) throws JSONException {
         List<String> stringList = new ArrayList();
         for (int i = 0; i < jsonArray.length(); i++) {
-            stringList.add(jsonArray.getString(i));
+            stringList.add(jsonArray.optString(i));
         }
         return stringList;
     }
