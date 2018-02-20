@@ -24,17 +24,29 @@ public class JsonUtils {
 
     public static Sandwich parseSandwichJson(String json) {
 
+        String mainName = "";
+        List<String> otherNames = new ArrayList<>();
+
         try {
             JSONObject jsonSandwich = new JSONObject(json);
-            JSONObject name = jsonSandwich.getJSONObject(NAME);
 
-            String mainName = name.optString(MAIN_NAME);
-            List<String> otherNames = prepareList(name.getJSONArray(ALSO_KNOWN_AS));
+            if (jsonSandwich.has(NAME)) {
+                JSONObject name = jsonSandwich.getJSONObject(NAME);
+
+                mainName = name.optString(MAIN_NAME);
+                if (name.has(ALSO_KNOWN_AS)) {
+                    otherNames = prepareList(name.getJSONArray(ALSO_KNOWN_AS));
+                }
+            }
 
             String placeOfOrigin = jsonSandwich.optString(PLACE_OF_ORIGIN);
             String description = jsonSandwich.optString(DESCRIPTION);
             String image = jsonSandwich.optString(IMAGE);
-            List<String> ingredients = prepareList(jsonSandwich.getJSONArray(INGREDIENTS));
+
+            List<String> ingredients = new ArrayList<>();
+            if (jsonSandwich.has(INGREDIENTS)) {
+                ingredients = prepareList(jsonSandwich.getJSONArray(INGREDIENTS));
+            }
 
             return new Sandwich(mainName, otherNames, placeOfOrigin, description, image, ingredients);
 
